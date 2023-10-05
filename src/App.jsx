@@ -1,52 +1,58 @@
 import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import axios from "axios";
-import { data } from "autoprefixer";
 
 function App() {
   const [data, setData] = useState();
   const [weather, setweather] = useState();
   const [location, setlocation] = useState();
-  const date = new Date(1696522403747).toLocaleTimeString();
+  const [search, setSearch] = useState();
+  const date = new Date().toLocaleTimeString();
+
+  const handleChange=(e)=>{
+    setSearch(e.target.value)
+  }
 
   useEffect(() => {
     axios
-      .get("http://api.weatherapi.com/v1/current.json?key=&q=London")
+      .get(`http://api.weatherapi.com/v1/current.json?key=${import.meta.env.VITE_API_KEY}&q=${search}`)
       .then((res) => {
         setweather(res.data.current);
         setlocation(res.data.location);
         console.log(res.data.current.cloud);
       });
-  }, []);
+  }, [search]);
 
   return (
-    <div className="grid grid-row-3 bg-hero-pattern bg-full text-white h-screen bg-no-repeat bg-cover">
+    <div className="flex flex-col bg-hero-pattern bg-full text-white h-screen bg-no-repeat bg-cover">
       <nav className="flex justify-between px-5 py-9 text-gray-500">
-        <div className="text-2xl p-2 flex gap-3">
+        <div className="text-2xl p-2  gap-3">
           Links
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-6 h-6">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-            />
-          </svg>
-          <input className="h-8 border-b-2 bg-transparent"></input>
+          <div className="flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+              />
+            </svg>
+            <input className="h-8 border-b-2 bg-transparent click" onChange={handleChange}></input>
+          </div>
         </div>
         <div className="text-left ">
           <div className="flex items-center">
             <img src={weather?.condition.icon} />
             <p className="text-3xl">{weather?.cloud}</p>
           </div>
-          <div>{location?.country}</div>
+          <div className="text-black">
+            {location?.name} ,{location?.country}
+          </div>
         </div>
       </nav>
       <main className="text-5xl flex flex-col gap-7 mt-[3.5em] mb-7 items-center text-center">
