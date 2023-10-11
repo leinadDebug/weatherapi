@@ -32,7 +32,7 @@ function App() {
         setDate(date);
         console.log(date);
       });
-  }, [search]);
+  }, [location?.localtime, search]);
 
   return (
     <div className="flex flex-col bg-hero-pattern bg-full text-white h-screen bg-no-repeat bg-cover">
